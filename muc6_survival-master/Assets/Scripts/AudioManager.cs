@@ -4,8 +4,11 @@ using System.Collections;
 public class AudioManager : MonoBehaviour 
 {
 	public static AudioManager instance = null;
-	public GameObject audioItem;
-	
+	public GameObject AudioItemSFX;
+	public GameObject AudioItemMX;
+
+	private GameObject prefabBus;
+
 	// Use this for initialization
 	void Awake() 
 	{
@@ -18,9 +21,14 @@ public class AudioManager : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	public void Play(AudioClip clip) 
+	public void Play(AudioClip clip, string bus) 
 	{
-		GameObject go = (GameObject)Instantiate (audioItem);
+		if (bus == "sfx") 
+			prefabBus = AudioItemSFX;
+		else if (bus == "mx")
+			prefabBus = AudioItemMX;
+
+		GameObject go = (GameObject)Instantiate (prefabBus);
 		AudioSource src = go.GetComponent<AudioSource> ();
 		src.clip = clip;
 		
