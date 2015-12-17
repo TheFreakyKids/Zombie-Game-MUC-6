@@ -16,7 +16,14 @@ namespace Completed
 		private Animator animator;					//Used to store a reference to the Player's animator component.
 		private int food;							//Used to store player food points total during level.
 		private Vector2 touchOrigin = -Vector2.one;	//Used to store location of screen touch origin for mobile controls.
-		
+		public AudioClip bush;
+		public AudioClip soda;
+		public AudioClip eatfood;
+		public AudioClip dead;
+		public AudioClip hit;
+		public AudioClip move;
+		//public AudioClip attack;
+		public string bus;
 		
 		//Start overrides the Start function of MovingObject
 		protected override void Start ()
@@ -122,7 +129,7 @@ namespace Completed
 		{
 			//Every time player moves, subtract from food points total.
 			food--;
-			
+			AudioManager.instance.Play (move, bus);
 			//Update food text display to reflect current score.
 			foodText.text = "Food: " + food;
 			
@@ -154,6 +161,8 @@ namespace Completed
 			
 			//Call the DamageWall function of the Wall we are hitting.
 			hitWall.DamageWall (wallDamage);
+
+			AudioManager.instance.Play (bush, bus);
 			
 			//Set the attack trigger of the player's animation controller in order to play the player's attack animation.
 			animator.SetTrigger ("playerChop");
@@ -181,6 +190,8 @@ namespace Completed
 				
 				//Update foodText to represent current total and notify player that they gained points
 				foodText.text = "+" + pointsPerFood + " Food: " + food;
+
+				AudioManager.instance.Play (eatfood, bus);
 				
 				//Disable the food object the player collided with.
 				other.gameObject.SetActive (false);
@@ -194,7 +205,8 @@ namespace Completed
 				
 				//Update foodText to represent current total and notify player that they gained points
 				foodText.text = "+" + pointsPerSoda + " Food: " + food;
-				
+
+				AudioManager.instance.Play (soda, bus);
 				
 				//Disable the soda object the player collided with.
 				other.gameObject.SetActive (false);
@@ -216,7 +228,11 @@ namespace Completed
 		{
 			//Set the trigger for the player animator to transition to the playerHit animation.
 			animator.SetTrigger ("playerHit");
-			
+
+			AudioManager.instance.Play (hit, bus);
+
+			//AudioManager.instance.Play (attack, bus);
+
 			//Subtract lost food points from the players total.
 			food -= loss;
 			
@@ -234,6 +250,7 @@ namespace Completed
 			//Check if food point total is less than or equal to zero.
 			if (food <= 0) 
 			{
+				AudioManager.instance.Play (dead, bus);
 				//Call the GameOver function of GameManager.
 				GameManager.instance.GameOver ();
 			}

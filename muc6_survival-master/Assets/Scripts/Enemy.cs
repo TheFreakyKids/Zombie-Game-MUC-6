@@ -12,7 +12,10 @@ namespace Completed
 		private Animator animator;							//Variable of type Animator to store a reference to the enemy's Animator component.
 		private Transform target;							//Transform to attempt to move toward each turn.
 		private bool skipMove;								//Boolean to determine whether or not enemy should skip a turn or move this turn.
-		
+
+		public AudioClip attack;
+		public AudioClip idle;
+		public string bus;
 		
 		//Start overrides the virtual Start function of the base class.
 		protected override void Start ()
@@ -49,6 +52,7 @@ namespace Completed
 			
 			//Now that Enemy has moved, set skipMove to true to skip next move.
 			skipMove = true;
+			AudioManager.instance.Play (idle, bus);
 		}
 		
 		
@@ -59,7 +63,9 @@ namespace Completed
 			//These values allow us to choose between the cardinal directions: up, down, left and right.
 			int xDir = 0;
 			int yDir = 0;
-			
+
+
+
 			//If the difference in positions is approximately zero (Epsilon) do the following:
 			if(Mathf.Abs (target.position.x - transform.position.x) < float.Epsilon)
 				
@@ -73,6 +79,8 @@ namespace Completed
 			
 			//Call the AttemptMove function and pass in the generic parameter Player, because Enemy is moving and expecting to potentially encounter a Player
 			AttemptMove <Player> (xDir, yDir);
+
+
 		}
 		
 		
@@ -82,12 +90,16 @@ namespace Completed
 		{
 			//Declare hitPlayer and set it to equal the encountered component.
 			Player hitPlayer = component as Player;
-			
+
+			//AudioManager.instance.Play (attack, bus);
+
 			//Call the LoseFood function of hitPlayer passing it playerDamage, the amount of foodpoints to be subtracted.
 			hitPlayer.LoseFood (playerDamage);
 			
 			//Set the attack trigger of animator to trigger Enemy attack animation.
 			animator.SetTrigger ("enemyAttack");
+
+			AudioManager.instance.Play (attack, bus);
 			
 		}
 	}
